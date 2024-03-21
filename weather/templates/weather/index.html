@@ -1,4 +1,60 @@
 {% extends "weather/base.html" %}
 {% block content %}
-    <h1>Hi There</h1>
+    <div class="container mt-4">
+        <h1 class="display-6 text-center">Welcome to Weather You Do</h1>
+        {% if request.user.is_authenticated %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="{% url 'users:profile' request.user.id %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Profile</a>
+                        <p class="text-muted text-center">Check out your Profile</p>
+                        <p class="text-muted text-center">Update your Profile picture</p>
+                        <p class="text-muted text-center">Update your username or password</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="{% url 'users:logout' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Logout</a>
+                        <p class="text-muted text-center">You can Log Out from here</p>
+                        <p class="text-muted text-center">Weather You Do or don't</p>
+                        <p class="text-muted text-center">Don't forget to tell your friends about us</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="#" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Current Forecast</a>
+                        <p class="text-muted text-center">Get the current forecast for any city</p>
+                        <p class="text-muted text-center">Search by city name</p>
+                        <p class="text-muted text-center">Specify the search further by adding the country code</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="#" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Hourly Forecast</a>
+                        <p class="text-muted text-center">Get the hourly forecast for any city for the next 4 days</p>
+                        <p class="text-muted text-center">Search by city name</p>
+                        <p class="text-muted text-center">Specify the search further by adding the country code</p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="{% url 'users:register' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Register</a>
+                        <p class="text-muted text-center">Information about register link</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border p-3 bg-white">
+                        <a href="{% url 'users:login' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Login</a>
+                        <p class="text-muted text-center">Information about login link</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <br><br><br>   
 {% endblock content %}

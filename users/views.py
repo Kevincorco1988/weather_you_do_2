@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect('weather:index')
+        return redirect('users:profile', pk=request.user.id)
     if request.method == 'POST':
         form = UserRegisterForm(request.POST) 
         if form.is_valid():
@@ -23,6 +23,7 @@ def register(request):
     else:
         form = UserRegisterForm() 
     return render(request, 'register.html', {'form': form})
+
 
 def login(request):
     if request.user.is_authenticated:
@@ -41,7 +42,7 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            return redirect('weather:index')
+            return redirect('users:profile', pk=request.user.id)
         else:
             messages.error(request, 'Username OR Password is incorrect!')
     else:
@@ -49,6 +50,14 @@ def login(request):
 
     return render(request, 'login.html', {'form':form})
 
+
+@login_required 
+def profile(request, pk):
+    user = User.objects.get(id=pk)
+    context = {
+        'profile': user
+    }
+    return render(request, 'profile.html', context)
 
 @login_required 
 def logout_view(request):

@@ -14,7 +14,7 @@
         <div class="d-flex align-items-center">
           {% if request.user.is_authenticated %}
           <div>
-            <a href="#" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Profile</a>
+            <a href="{% url 'users:profile' request.user.id %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Profile</a>
           </div>
           <form action="{% url 'users:logout' %}" method="post" class="text-primary">
             {% csrf_token %}
