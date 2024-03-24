@@ -1,5 +1,29 @@
 {% extends "weather/base.html" %}
-{% load crispy_forms_tags %}
+{% load static %} <!--Try without at the end (By removing) -->
+{% load crispy_forms_tags %} 
 {% block content %}
-    <h1>{{ user.username }}</h1>
+<div class="content-section text-center mt-5"> <!-- Add text-center class for center alignment -->
+    <div class="media">
+        {% if 'placeholder' in profile.image.url %}
+            <img class="rounded-circle img-fluid account_img border border-dark border-2 rounded-4 mb-3" 
+                 src="{% static 'images/default.jpg' %}" alt="">
+        {% else %}
+            <img class="rounded-circle img-fluid account_img border border-dark border-2 rounded-4 offset-lg-0 mb-3"
+                 src="{{profile.image.url}}" alt="">
+        {% endif %}
+        <!--<img class="rounded-circle account-img" src="{{ user.profile.image.url }}">-->
+        <div class="media-body">
+            <p class="account-info text-white mb-3" style="font-size: 2em;">Username: <span class="text-black">{{ user.username }}</span></p> <!-- Add text-black class for black color -->
+            <p class="account-info text-white mb-4" style="font-size: 2em;">Email: <span class="text-black">{{ user.email }}</span></p> <!-- Add text-black class for black color -->
+        </div>        
+    </div>
+    <div> <!-- Place the buttons outside the media block -->
+        <a href="{% url 'users:edit_account' %}" class="btn btn-primary btn-lg">Edit Profile</a>
+        <a href="{% url 'users:delete_account' %}" class="btn btn-danger btn-lg">Delete Profile</a>
+    </div>
+</div>
 {% endblock content %}
+
+
+
+

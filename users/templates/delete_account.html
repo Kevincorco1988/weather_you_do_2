@@ -1,0 +1,24 @@
+{% extends 'weather/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Form to delete user account -->
+
+<main class="container">
+
+    <div class="row justify-content-center g-0">
+        <div
+            class="col-11 col-md-6 col-xl-4 p-2 mb-5 border border-dark border-2 rounded-4 justify-content-center">
+            <form method="POST">
+                {% csrf_token %}
+                <p>Are you sure you want to delete your Account??</p>
+                
+                    <a class="login-register btn btn-primary" href="{% url 'users:profile' request.user.profile.id %}">
+                        Back
+                    </a>
+                
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}

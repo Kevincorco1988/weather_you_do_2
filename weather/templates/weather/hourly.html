@@ -1,0 +1,45 @@
+{% extends "weather/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Hourly Forecast</h1>
+    <form action="{% url 'weather:hourly' %}" method="GET">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
+            </div>
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Enter country code" name="country_code">
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <br><br><br><br><br>
+    {% if hourly_forecast %}
+    <div class="mt-5">
+        <h2 class="text-center">Hourly Forecast</h2>
+        <div class="row">
+            {% for forecast in hourly_forecast %}
+            <div class="col-md-4">
+                <div class="card mb-4 card-custom-background"> <!-- Apply the card-custom-background class -->
+                    <div class="card-body">
+                        <h5 class="card-day text-green">{{ forecast.day_of_week }}</h5>
+                        <h5 class="card-timezone text-orange">Timezone: {{ forecast.timezone }}</h5>
+                        <p class="card-text"><span class="label-text">Temperature:</span> <span class="data-text">{{ forecast.temperature }}°C</span></p>
+                        <p class="card-text"><span class="label-text">Feels Like:</span> <span class="data-text">{{ forecast.feels_like }}°C</span></p>
+                        <p class="card-text"><span class="label-text">Humidity:</span> <span class="data-text">{{ forecast.humidity }}%</span></p>
+                        <p class="card-text"><span class="label-text">Pressure:</span> <span class="data-text">{{ forecast.pressure }}hPa</span></p>
+                        <p class="card-text"><span class="label-text">Weather:</span> <span class="data-text">{{ forecast.weather_description }}</span></p>
+                        <p class="card-text"><span class="label-text">Forecast:</span> <span class="data-text">{{ forecast.forecast_main }}</span></p>
+                        <img src="{{ forecast.forecast_icon }}" alt="Weather Icon">
+                    </div>                    
+                </div>
+            </div>
+            {% endfor %}        
+        </div>
+    </div>
+    {% endif %}
+</div>
+<br><br><br>
+{% endblock %}

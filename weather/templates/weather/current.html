@@ -1,0 +1,40 @@
+{% extends "weather/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Find the current weather for any city</h1>
+    <form action="{% url 'weather:current' %}" method="GET">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
+            </div>
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" placeholder="Enter country code" name="country_code">
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <br><br><br><br><br>
+    {% if current_weather %}
+        <div class="mt-5">
+            <h2 class="text-center">Current Weather</h2>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">City:</strong> <span class="data-text">{{ current_weather.city_name }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Country Code:</strong> <span class="data-text">{{ current_weather.country_code }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Local Time:</strong> <span class="data-text">{{ current_weather.local_time }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Temperature:</strong> <span class="data-text">{{ current_weather.temperature }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Feels Like:</strong> <span class="data-text">{{ current_weather.feels_like }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Humidity:</strong> <span class="data-text">{{ current_weather.humidity }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Pressure:</strong> <span class="data-text">{{ current_weather.pressure }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Weather Description:</strong> <span class="data-text">{{ current_weather.weather_description }}</span></li>
+                <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Forecast Main:</strong> <span class="data-text">{{ current_weather.forecast_main }}</span></li>
+                <li class="list-group-item list-group-item-custom-background">
+                    <strong class="label-text">Weather Icon:</strong> <img src="{{ current_weather.forecast_icon }}" alt="Weather Icon">
+                </li>            
+            </ul>            
+        </div>
+    {% endif %}
+</div>
+<br><br><br>
+{% endblock %}

@@ -1,60 +1,73 @@
 {% extends "weather/base.html" %}
 {% block content %}
-    <div class="container mt-4">
-        <h1 class="display-6 text-center">Welcome to Weather You Do</h1>
-        {% if request.user.is_authenticated %}
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="{% url 'users:profile' request.user.id %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Profile</a>
-                        <p class="text-muted text-center">Check out your Profile</p>
-                        <p class="text-muted text-center">Update your Profile picture</p>
-                        <p class="text-muted text-center">Update your username or password</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="{% url 'users:logout' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Logout</a>
-                        <p class="text-muted text-center">You can Log Out from here</p>
-                        <p class="text-muted text-center">Weather You Do or don't</p>
-                        <p class="text-muted text-center">Don't forget to tell your friends about us</p>
+<div class="container mt-4">
+    <h1 class="display-6 text-center mb-5">Welcome to Weather You Do</h1>
+    {% if request.user.is_authenticated %}
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Profile</h5>
+                        <p class="card-text">Check out your profile, update your profile picture, username, or password.</p>
+                        <a href="{% url 'users:profile' request.user.id %}" class="btn btn-primary">Go to Profile</a>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="#" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Current Forecast</a>
-                        <p class="text-muted text-center">Get the current forecast for any city</p>
-                        <p class="text-muted text-center">Search by city name</p>
-                        <p class="text-muted text-center">Specify the search further by adding the country code</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="#" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3 mb-4">Hourly Forecast</a>
-                        <p class="text-muted text-center">Get the hourly forecast for any city for the next 4 days</p>
-                        <p class="text-muted text-center">Search by city name</p>
-                        <p class="text-muted text-center">Specify the search further by adding the country code</p>
+            <div class="col-md-6">
+                <div class="card h-100 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Logout</h5>
+                        <p class="card-text">You can log out from here. Don't forget to tell your friends about us!</p>
+                        <form action="{% url 'users:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        {% else %}
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="{% url 'users:register' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Register</a>
-                        <p class="text-muted text-center">Information about register link</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="border p-3 bg-white">
-                        <a href="{% url 'users:login' %}" class="nav-link btn btn-link text-primary text-decoration-none fs-8 me-3">Login</a>
-                        <p class="text-muted text-center">Information about login link</p>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body mb-3">
+                        <h5 class="card-title">Current Forecast</h5>
+                        <p class="card-text">Get the current forecast for any city. Search by city name and specify the country code.</p>
+                        <a href="{% url 'weather:current' %}" class="btn btn-primary">Check Current Forecast</a>
                     </div>
                 </div>
             </div>
-        {% endif %}
-    </div>
-    <br><br><br>   
+            <div class="col-md-6">
+                <div class="card h-100 mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Hourly Forecast</h5>
+                        <p class="card-text">Get the hourly forecast for any city for the next 4 days. Search by city name and specify the country code.</p>
+                        <a href="{% url 'weather:hourly' %}" class="btn btn-primary">Check Hourly Forecast</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Register</h5>
+                        <p class="card-text">Have you signed up with us yet? Please do so here!</p>
+                        <a href="{% url 'users:register' %}" class="btn btn-primary">Register</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Login</h5>
+                        <p class="card-text">Already have an account? Log in here!</p>
+                        <a href="{% url 'users:login' %}" class="btn btn-primary">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+<br><br><br>
 {% endblock content %}

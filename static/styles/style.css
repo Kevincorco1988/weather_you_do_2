@@ -1,0 +1,30 @@
+.account_img {
+    width: 150px;
+    height: 150px;
+}
+.text-black {
+    color: black;
+}
+
+.list-group-item-custom-background, .card-custom-background {
+    background-color: #add8e6;
+}
+
+.text-green {
+    color: green;
+}
+
+.text-orange {
+    color: orange;
+}
+
+.label-text {
+    color: white;
+    font-weight: bold; /* Optionally, you can make the labels bold */
+}
+
+.data-text {
+    color: black;
+}
+
+
