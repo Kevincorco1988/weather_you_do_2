@@ -82,6 +82,17 @@ def current(request):
     return render(request, 'weather/current.html')
 
 
+
+def group_forecast_by_day(hourly_forecast):
+    # Group hourly forecast by day
+    grouped_forecast = {}
+    for forecast in hourly_forecast:
+        day = forecast['day_of_week']
+        if day not in grouped_forecast:
+            grouped_forecast[day] = []
+        grouped_forecast[day].append(forecast)
+    return grouped_forecast
+
 def hourly(request):
     if request.method == 'GET':
         # Gets the city name and country code from the request
@@ -114,7 +125,6 @@ def hourly(request):
                         'time': item['dt_txt'],
                         'temperature': item['main']['temp'],
                         'day_of_week': dt.datetime.utcfromtimestamp(int(item['dt'])).strftime('%A'), # Get day of the week
-                        #'timezone': get_date(data['city']['timezone']),
                         'timezone': (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%Y-%m-%d %H:%M:%S'),
                         'feels_like': item['main']['feels_like'],
                         'humidity': item['main']['humidity'],
@@ -124,17 +134,26 @@ def hourly(request):
                         'forecast_icon': f"http://openweathermap.org/img/wn/{item['weather'][0]['icon']}.png"
                     }
                     hourly_forecast.append(forecast)
+                
+                # Group hourly forecast by day
+                grouped_forecast = group_forecast_by_day(hourly_forecast)
+                
+                # Print the fetched data
+                print("Hourly Forecast:")
+                print(json.dumps(grouped_forecast, indent=4))
                     
             except Exception as e:
                 # Prints error message if an exception occurs
                 print(f"An error occurred: {e}")
-                hourly_forecast = None
+                grouped_forecast = None
 
             # Renders the hourly.html template with hourly forecast data
-            return render(request, 'weather/hourly.html', {'hourly_forecast': hourly_forecast})
+            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast})
         else:
             # If city name is empty, renders the hourly.html template without attempting to fetch data
             return render(request, 'weather/hourly.html')
 
     # Renders the hourly.html template
     return render(request, 'weather/hourly.html')
+
+

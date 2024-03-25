@@ -1,20 +1,22 @@
 {% extends "weather/base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Find the current weather for any city</h1>
+    <h1 class="text-center mb-4">Find the current weather</h1>
     <form action="{% url 'weather:current' %}" method="GET">
-        <div class="row justify-content-center">
-            <div class="col-md-6 mb-3">
-                <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
-            </div>
-            <div class="col-md-6 mb-3">
-                <input type="text" class="form-control" placeholder="Enter country code" name="country_code">
-            </div>
-            <div class="col-md-12 text-center">
-                <button type="submit" class="btn btn-primary">Search</button>
+        <div class="container"> <!-- Use a container to center the content -->
+            <div class="row justify-content-center"> <!-- Center the row -->
+                <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control" placeholder="Enter country code" name="country_code">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <button type="submit" class="btn btn-primary">Search</button> <!-- Adjusted button size -->
+                </div>
             </div>
         </div>
-    </form>
+    </form>    
     <br><br><br><br><br>
     {% if current_weather %}
         <div class="mt-5">

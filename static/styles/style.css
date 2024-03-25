@@ -2,20 +2,17 @@
     width: 150px;
     height: 150px;
 }
+
+.list-group-item-custom-background, .card-custom-background {
+    background-color: lightseagreen;
+}
+
 .text-black {
     color: black;
 }
 
-.list-group-item-custom-background, .card-custom-background {
-    background-color: #add8e6;
-}
-
 .text-green {
     color: green;
-}
-
-.text-orange {
-    color: orange;
 }
 
 .label-text {
@@ -25,6 +22,11 @@
 
 .data-text {
     color: black;
+}
+
+.city-name {
+    font-size: 60px;
+    color: darkblue;
 }
 
 
