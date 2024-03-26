@@ -30,7 +30,7 @@ def register(request):
 @csrf_protect
 def login(request):
     if request.user.is_authenticated:
-        return redirect('users:profile', pk=request.user.profile.id) 
+        return redirect('weather:index') 
 
     if request.method == 'POST':
         form = AuthenticationForm(request.POST)
@@ -45,7 +45,7 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            return redirect('users:profile', pk=request.user.profile.id)
+            return redirect('weather:index')
         else:
             messages.error(request, 'Username OR Password is incorrect!')
     else:

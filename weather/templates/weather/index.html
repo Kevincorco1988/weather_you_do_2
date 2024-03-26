@@ -1,14 +1,14 @@
 {% extends "weather/base.html" %}
 {% block content %}
 <div class="container mt-4">
-    <h1 class="display-6 text-center mb-5">Welcome to Weather You Do</h1>
+    <h1 class="display-6 text-center mb-5 welcome-text">Welcome to Weather You Do {% if request.user.is_authenticated %}<span class="username">{{ request.user.username }}</span>{% endif %}</h1>
     {% if request.user.is_authenticated %}
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="card h-100 mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Profile</h5>
-                        <p class="card-text">Check out your profile, update your profile picture, username, or password.</p>
+                        <p class="card-text">Check out your profile, add/update your profile picture, username, or password.</p>
                         <a href="{% url 'users:profile' request.user.id %}" class="btn btn-primary">Go to Profile</a>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                 <div class="card h-100">
                     <div class="card-body mb-3">
                         <h5 class="card-title">Current Forecast</h5>
-                        <p class="card-text">Get the current forecast for any city. Search by city name and specify the country code.</p>
+                        <p class="card-text">Find the current forecast for any city worldwide. A city name is required to search - broaden your search using the country name if necessary.</p>
                         <a href="{% url 'weather:current' %}" class="btn btn-primary">Check Current Forecast</a>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="card h-100 mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Hourly Forecast</h5>
-                        <p class="card-text">Get the hourly forecast for any city for the next 4 days. Search by city name and specify the country code.</p>
+                        <p class="card-text">Find the hourly forecast for any city worldwide for the next 4 days. A city name is required to search - broaden your search using the country name if necessary.</p>
                         <a href="{% url 'weather:hourly' %}" class="btn btn-primary">Check Hourly Forecast</a>
                     </div>
                 </div>
@@ -71,3 +71,5 @@
 </div>
 <br><br><br>
 {% endblock content %}
+
+

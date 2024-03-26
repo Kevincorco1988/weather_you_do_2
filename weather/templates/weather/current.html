@@ -9,7 +9,12 @@
                     <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
                 </div>
                 <div class="col-md-3 mb-3">
-                    <input type="text" class="form-control" placeholder="Enter country code" name="country_code">
+                    <select class="form-select" name="country_code">
+                        <option value="">Select Country</option>
+                        {% for code, name in country_codes.items %}
+                            <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-3 mb-3">
                     <button type="submit" class="btn btn-primary">Search</button> <!-- Adjusted button size -->

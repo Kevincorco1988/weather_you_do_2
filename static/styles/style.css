@@ -1,3 +1,12 @@
+.welcome-text {
+    color: rgba(255, 255, 255, 1);
+}
+
+.username {
+    color: black;
+    text-transform: capitalize;
+}
+
 .account_img {
     width: 150px;
     height: 150px;
@@ -17,7 +26,7 @@
 
 .label-text {
     color: white;
-    font-weight: bold; /* Optionally, you can make the labels bold */
+    font-weight: bold; 
 }
 
 .data-text {
@@ -28,5 +37,6 @@
     font-size: 60px;
     color: darkblue;
 }
+
 
 
