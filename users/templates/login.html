@@ -12,13 +12,13 @@
                         {{ form|crispy }} 
                     </fieldset>
                     <div class="form-group"> 
-                        <button class="btn btn-light text-dark" type="submit">Login</button> <!-- Add btn-light class for white background and text-dark class for black text -->
+                        <button class="btn btn-dark-blue" type="submit">Login</button>
                     </div>
                 </form>
-                <p class="mt-2 text-black">Forgot Password?:  <a href="{% url 'users:password_reset' %}" class="text-white">Password Reset</a></p> <!-- Add text-white class to make text white -->
+                <p class="mt-2 text-black">Forgot Password?:  <a href="{% url 'users:password_reset' %}" class="text-white">Password Reset</a></p> 
                 <div class="border-top pt-3">
                     <small class="text-muted">
-                        Need An Account? <a class="ml-2 text-white" href="{% url 'users:register' %}">Register Now</a> <!-- Add text-white class to make text white -->
+                        Need An Account? <a class="ml-2 text-white" href="{% url 'users:register' %}">Register Now</a> 
                     </small>
                 </div>
             </div>

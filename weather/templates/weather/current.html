@@ -17,7 +17,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <button type="submit" class="btn btn-primary">Search</button> <!-- Adjusted button size -->
+                    <button type="submit" class="btn btn-dark-blue">Search</button>
                 </div>
             </div>
         </div>
@@ -41,6 +41,10 @@
                 </li>            
             </ul>            
         </div>
+    {% else %}
+        {% if city_name != None %}
+        <h1 class="text-center">No search results for <span class="bg-warning p-1">{{ city_name }}</span>, try again</h1>
+        {% endif %}
     {% endif %}
 </div>
 <br><br><br>

@@ -7,6 +7,10 @@
     text-transform: capitalize;
 }
 
+.ms-auto {
+    height: 30px;
+}
+
 .account_img {
     width: 150px;
     height: 150px;
@@ -37,6 +41,16 @@
     font-size: 60px;
     color: darkblue;
 }
+
+.btn-dark-blue {
+    background-color: #00008b; 
+    color: #fff; 
+}
+
+.btn-dark-blue:hover {
+    background-color: blue;
+}
+
 
 
 

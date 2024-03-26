@@ -326,7 +326,7 @@ def current(request):
                 current_weather = None
 
             # Renders the current.html template with current weather data
-            return render(request, 'weather/current.html', {'current_weather': current_weather, 'country_codes': COUNTRY_CODES})
+            return render(request, 'weather/current.html', {'current_weather': current_weather, 'country_codes': COUNTRY_CODES, 'city_name': city_name})
         else:
             # If city name is empty, renders the current.html template without attempting to fetch data
             return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES})
@@ -366,7 +366,7 @@ def hourly(request):
             else:
                 # Constructs the URL to fetch hourly forecast data with only city name
                 url = f'https://pro.openweathermap.org/data/2.5/forecast/hourly?q={encoded_city_name}&appid={api_key}&units=metric'
-
+            print(url)
             try:
                 # Opens the URL and read the response
                 response = urllib.request.urlopen(url)
@@ -375,10 +375,11 @@ def hourly(request):
                 hourly_forecast = []
                 # Extracts relevant forecast information from the response data
                 for item in data['list']:
+                    #print(int(item['dt']),int(data['city']['timezone'])/3600, (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%Y-%m-%d %H:%M:%S'),(dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'))
                     forecast = {
                         'time': item['dt_txt'],
                         'temperature': item['main']['temp'],
-                        'day_of_week': dt.datetime.utcfromtimestamp(int(item['dt'])).strftime('%A'), # Get day of the week
+                        'day_of_week': (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%A'), # Get day of the week
                         'timezone': (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%Y-%m-%d %H:%M:%S'),
                         'feels_like': item['main']['feels_like'],
                         'humidity': item['main']['humidity'],
@@ -388,13 +389,24 @@ def hourly(request):
                         'forecast_icon': f"http://openweathermap.org/img/wn/{item['weather'][0]['icon']}.png"
                     }
                     hourly_forecast.append(forecast)
+                """
+                print(hourly_forecast)
+                with open(r'data.txt', 'w') as fp:
+                    for item in hourly_forecast:
+                        # write each item on a new line
+                        fp.write("%s\n" % item)
+                        """
                 
                 # Group hourly forecast by day
                 grouped_forecast = group_forecast_by_day(hourly_forecast)
                 
                 # Print the fetched data
                 print("Hourly Forecast:")
-                print(json.dumps(grouped_forecast, indent=4))
+                #print(json.dumps(grouped_forecast, indent=4))
+                """
+                with open('data.json', 'w', encoding='utf-8') as f:
+                    json.dump(grouped_forecast, f, ensure_ascii=False, indent=4)
+                    """
                     
             except Exception as e:
                 # Prints error message if an exception occurs
@@ -402,7 +414,7 @@ def hourly(request):
                 grouped_forecast = None
 
             # Renders the hourly.html template with hourly forecast data
-            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES})
+            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name})
         else:
             # If city name is empty, renders the hourly.html template without attempting to fetch data
             return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES})

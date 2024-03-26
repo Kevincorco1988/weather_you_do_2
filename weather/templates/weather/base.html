@@ -18,7 +18,7 @@
         <div class="container">
             <a class="navbar-brand" href="{% url 'weather:index' %}">
                 WeatherYouDo
-                <img src="{% static 'images/weatheryoudo_logo.png' %}" alt="WeatherYouDo Logo" class="ms-auto" style="height: 35px;">
+                <img src="{% static 'images/weatheryoudo_logo.png' %}" alt="WeatherYouDo Logo" class="ms-auto">
             </a>
             <div class="d-flex">
                 {% if request.user.is_authenticated %}

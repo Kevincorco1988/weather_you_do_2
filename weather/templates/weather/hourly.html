@@ -17,7 +17,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <button type="submit" class="btn btn-primary">Search</button> <!-- Adjusted button size -->
+                    <button type="submit" class="btn btn-dark-blue">Search</button>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
     {% if grouped_forecast %}
         <div class="mt-5">
             {% for day, forecasts in grouped_forecast.items %}
-                <div class="day-forecasts mb-5"> <!-- Add a class with margin-bottom -->
+                <div class="day-forecasts mb-5"> 
                     {% if forloop.first and request.GET.city_name %}
                         <h3 class="text-center city-name mb-3">{{ request.GET.city_name|title }}</h3>
                     {% endif %}
@@ -53,6 +53,10 @@
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+        {% if city_name != None %}
+            <h1 class="text-center">No search results for <span class="bg-warning p-1">{{ city_name }}</span>, try again</h1>
+        {% endif %}
     {% endif %}
 </div>
 <br><br><br>
