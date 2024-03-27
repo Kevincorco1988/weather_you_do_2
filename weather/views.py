@@ -1,6 +1,10 @@
 # Standard Library Imports
 import datetime as dt
 import os
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.utils.text import capfirst
+from .models import Favourite
 
 # Third-Party Imports
 import pytz
@@ -276,11 +280,61 @@ def index(request):
     return render(request, 'weather/index.html')
 
 
+
+@login_required
+def add_to_favorites(request, city_name):
+    """ Add a city to the user's favorites """
+    # Capitalize the city name
+    city_name = capfirst(city_name)
+    
+    fav, created = Favourite.objects.get_or_create(
+        owner=request.user.profile, city_name=city_name.lower())
+    if created:
+        messages.success(
+            request, f'"{city_name}" has been added to your favorites!')
+    else:
+        messages.info(
+            request, f'"{city_name}" is already in your favorites.')
+    return redirect('weather:index')
+
+
+@login_required
+def remove_from_favorites(request, city_name):
+    """ Remove a city from the user's favorites """
+    # Capitalize the city name
+    city_name = capfirst(city_name)
+
+    deleted, _ = Favourite.objects.filter(
+        owner=request.user.profile, city_name=city_name.lower()).delete()
+
+    if deleted:
+        messages.success(
+            request, f'"{city_name}" has been removed from your favorites.')
+    else:
+        messages.info(
+            request, f'"{city_name}" was not found in your favorites.')
+    return redirect('weather:index')
+
+
+
+@login_required
+def favourites(request):
+    if request.user.is_authenticated:
+        # Get the list of favorite product IDs for the logged-in user
+        favorite_cities = Favourite.objects.filter(
+            owner=request.user.profile).values_list('city_name', flat=True)
+    else:
+        favorite_cities = []
+    return render(request, 'weather/favourites.html', {'favorite_cities':favorite_cities})
+
+
+@login_required
 def current(request):
     if request.method == 'GET':
         # Gets the city name and country code from the request
         city_name = request.GET.get('city_name')
         country_code = request.GET.get('country_code')
+        is_favorite = False  # Initialize is_favorite
 
         if city_name:
             # API key for OpenWeatherMap
@@ -325,14 +379,18 @@ def current(request):
                 print(f"An error occurred: {e}")
                 current_weather = None
 
+            if request.user.is_authenticated and current_weather:
+                is_favorite = Favourite.objects.filter(
+                    owner=request.user.profile, city_name=city_name.lower()).exists()
+
             # Renders the current.html template with current weather data
-            return render(request, 'weather/current.html', {'current_weather': current_weather, 'country_codes': COUNTRY_CODES, 'city_name': city_name})
+            return render(request, 'weather/current.html', {'current_weather': current_weather, 'country_codes': COUNTRY_CODES, 'city_name': city_name,'is_favorite': is_favorite})
         else:
             # If city name is empty, renders the current.html template without attempting to fetch data
-            return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES})
+            return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
     # Renders the current.html template
-    return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES})
+    return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
 
 
@@ -347,11 +405,13 @@ def group_forecast_by_day(hourly_forecast):
         grouped_forecast[day].append(forecast)
     return grouped_forecast
 
+@login_required
 def hourly(request):
     if request.method == 'GET':
         # Gets the city name and country code from the request
         city_name = request.GET.get('city_name')
         country_code = request.GET.get('country_code')
+        is_favorite = False  # Initialize is_favorite
 
         if city_name:
             # API key for OpenWeatherMap
@@ -413,13 +473,17 @@ def hourly(request):
                 print(f"An error occurred: {e}")
                 grouped_forecast = None
 
+            if request.user.is_authenticated and grouped_forecast:
+                is_favorite = Favourite.objects.filter(
+                    owner=request.user.profile, city_name=city_name.lower()).exists()
+            print(is_favorite)
             # Renders the hourly.html template with hourly forecast data
-            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name})
+            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name, 'is_favorite':is_favorite})
         else:
             # If city name is empty, renders the hourly.html template without attempting to fetch data
-            return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES})
+            return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
     # Renders the hourly.html template
-    return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES})
+    return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
 

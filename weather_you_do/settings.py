@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-development = os.environ.get('DEVELOPMENT', False)
+development = os.environ.get('DEVELOPMENT', False).lower() == 'True'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -95,6 +95,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+"""
+if (development == 'True'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+"""
 
 
 # Password validation

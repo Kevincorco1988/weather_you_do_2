@@ -1,10 +1,10 @@
 {% extends "weather/base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Find the current weather</h1>
+    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Find the current weather</h1>
     <form action="{% url 'weather:current' %}" method="GET">
-        <div class="container"> <!-- Use a container to center the content -->
-            <div class="row justify-content-center"> <!-- Center the row -->
+        <div class="container"> 
+            <div class="row justify-content-center">
                 <div class="col-md-3 mb-3">
                     <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
                 </div>
@@ -23,6 +23,22 @@
         </div>
     </form>    
     <br><br><br><br><br>
+
+    {% if request.user.is_authenticated and is_favorite != None %}
+        <div class="mt-5 d-flex justify-content-center align-items-center">
+            <div class="text-center">
+                {% if is_favorite %}
+                    <p class="fs-1"><i class="fas fa-heart text-white"></i><small class="text-white"> <a href="{% url 'weather:remove_from_favorites' city_name %}" class="text-white">Remove from Favorites</a></small></p>
+                {% else %}
+                    <p class="fs-1"><i class="fas fa-heart text-white"></i><small class="text-white"> <a href="{% url 'weather:add_to_favorites' city_name %}" class="text-white">Add to Favorites</a></small></p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+
+
+
     {% if current_weather %}
         <div class="mt-5">
             <h2 class="text-center">Current Weather</h2>

@@ -1,0 +1,29 @@
+{% extends "weather/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Your Favourite Cities</h1>
+    <div class="row">
+        {% for city in favorite_cities %}
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ city|capfirst }}</h5>
+                    <p class="card-text">Check the weather for {{ city|capfirst }}.</p>
+                    <a href="{% url 'weather:current' %}?city_name={{ city }}" class="btn btn-primary">Current Forecast</a>
+                    <a href="{% url 'weather:hourly' %}?city_name={{ city }}" class="btn btn-primary">Hourly Forecast</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                No favorite cities added yet.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
