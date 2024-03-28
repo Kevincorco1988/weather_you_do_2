@@ -24,20 +24,19 @@
     </form>    
     <br><br><br><br><br>
 
-    {% if request.user.is_authenticated and is_favorite != None %}
-        <div class="mt-5 d-flex justify-content-center align-items-center">
-            <div class="text-center">
-                {% if is_favorite %}
-                    <p class="fs-1"><i class="fas fa-heart text-white"></i><small class="text-white"> <a href="{% url 'weather:remove_from_favorites' city_name %}" class="text-white">Remove from Favorites</a></small></p>
-                {% else %}
-                    <p class="fs-1"><i class="fas fa-heart text-white"></i><small class="text-white"> <a href="{% url 'weather:add_to_favorites' city_name %}" class="text-white">Add to Favorites</a></small></p>
-                {% endif %}
+    {% if grouped_forecast %}
+        {% if request.user.is_authenticated and is_favorite != None %}
+            <div class="mt-5 d-flex justify-content-center align-items-center">
+                <div class="text-center">
+                    {% if is_favorite %}
+                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:remove_from_favorites' city_name %}" class="text-white">Remove from Favourites</a></small></p>
+                    {% else %}
+                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:add_to_favorites' city_name %}" class="text-white">Add to Favourites</a></small></p>
+                    {% endif %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
-
-
-
 
     {% if current_weather %}
         <div class="mt-5">
@@ -59,9 +58,16 @@
         </div>
     {% else %}
         {% if city_name != None %}
-        <h1 class="text-center">No search results for <span class="bg-warning p-1">{{ city_name }}</span>, try again</h1>
+            <div class="container text-center mt-5">
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">No search results!</h4>
+                    <p class="mb-0">We couldn't find any results for <strong>{{ city_name }}</strong>. Please try again with a different search query.</p>
+                </div>
+            </div>
+            <br><br><br>
         {% endif %}
     {% endif %}
 </div>
 <br><br><br>
 {% endblock %}
+

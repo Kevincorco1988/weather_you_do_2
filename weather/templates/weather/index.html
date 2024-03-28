@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="display-6 text-center mb-5 welcome-text">Welcome to Weather You Do {% if request.user.is_authenticated %}<span class="username">{{ request.user.username }}</span>{% endif %}</h1>
+    <h1 class="display-6 text-center mb-5 welcome-text">Hi {% if request.user.is_authenticated %}<span class="username">{{ request.user.username }}!</span><br> Welcome to Weather You Do{% endif %}</h1>
     {% if request.user.is_authenticated %}
         <div class="row g-4">
             <div class="col-md-6">
