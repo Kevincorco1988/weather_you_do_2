@@ -24,7 +24,7 @@
     </form>    
     <br><br><br><br><br>
 
-    {% if grouped_forecast %}
+    {% if current_weather %}
         {% if request.user.is_authenticated and is_favorite != None %}
             <div class="mt-5 d-flex justify-content-center align-items-center">
                 <div class="text-center">
@@ -37,6 +37,7 @@
             </div>
         {% endif %}
     {% endif %}
+
 
     {% if current_weather %}
         <div class="mt-5">
