@@ -1,8 +1,8 @@
 {% extends "weather/base.html" %}
-{% load static %} <!--Try without at the end (By removing) -->
+{% load static %} <!-- Loads static -->
 {% load crispy_forms_tags %} 
 {% block content %}
-<div class="content-section text-center mt-5"> <!-- Add text-center class for center alignment -->
+<div class="content-section text-center mt-5"> <!-- Adds text-center class for center alignment of content section -->
     <div class="media">
         {% if 'placeholder' in profile.image.url %}
             <img class="rounded-circle img-fluid account_img border border-dark border-2 rounded-4 mb-3" 
@@ -17,7 +17,7 @@
             <p class="account-info text-white mb-4" style="font-size: 2em;">Email: <span class="text-black">{{ user.email }}</span></p> <!-- Add text-black class for black color -->
         </div>        
     </div>
-    <div> <!-- Place the buttons outside the media block -->
+    <div> <!-- Buttons to edit or delete profile -->
         <a href="{% url 'users:edit_account' %}" class="btn btn-dark-blue btn-lg">Edit Profile</a>
         <a href="{% url 'users:delete_account' %}" class="btn btn-danger btn-lg">Delete Profile</a>
     </div>

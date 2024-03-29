@@ -1,10 +1,14 @@
-{% extends "weather/base.html" %}
+{% extends "weather/base.html" %} <!-- Extends base.html template -->
 
-{% block content %}
-<div class="container mt-4">
-    <h1 class="display-6 text-center mb-5 welcome-text">Hi {% if request.user.is_authenticated %}<span class="username">{{ request.user.username }}!</span><br> Welcome to Weather You Do{% endif %}</h1>
+{% block content %} <!-- Defines content block -->
+
+<div class="container mt-4"> <!-- Main content container -->
+    <h1 class="display-6 text-center mb-5 welcome-text">Hi {% if request.user.is_authenticated %}<span class="username">{{ request.user.username }}!</span><br> Welcome to Weather You Do{% endif %}</h1> <!-- Greeting message, conditional based on user authentication -->
+
     {% if request.user.is_authenticated %}
+        <!-- Displays cards for authenticated users -->
         <div class="row g-4">
+            <!-- Profile card -->
             <div class="col-md-6">
                 <div class="card h-100 mb-3">
                     <div class="card-body">
@@ -14,6 +18,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Logout card -->
             <div class="col-md-6">
                 <div class="card h-100 mb-3">
                     <div class="card-body">
@@ -26,6 +31,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Favourites card -->
             <div class="col-md-6">
                 <div class="card h-100 mb-3">
                     <div class="card-body">
@@ -35,6 +41,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Current Forecast card -->
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body mb-3">
@@ -44,6 +51,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Hourly Forecast card -->
             <div class="col-md-6">
                 <div class="card h-100 mb-3">
                     <div class="card-body">
@@ -55,7 +63,9 @@
             </div>
         </div>
     {% else %}
+        <!-- Displays cards for non-authenticated users -->
         <div class="row g-4">
+            <!-- Register card -->
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
@@ -65,6 +75,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Login card -->
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
@@ -76,9 +87,12 @@
             </div>
         </div>
     {% endif %}
-</div>
-<br><br><br>
-{% endblock content %}
+</div> <!-- End of main content container -->
+
+<br><br><br> 
+
+{% endblock content %} <!-- End of content block -->
+
 
 
 

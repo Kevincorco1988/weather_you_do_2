@@ -274,7 +274,7 @@ COUNTRY_CODES = {
     "AX": "Åland Islands",
 }
 
-
+# Gets the date based on the timezone
 def get_date(timezone):
     tz = dt.timezone(dt.timedelta(seconds=int(timezone)))
     return dt.datetime.now(tz = tz).strftime("%Y-%m-%d, %H:%M:%S")
@@ -284,7 +284,7 @@ def index(request):
     return render(request, 'weather/index.html')
 
 
-
+# Adds city to favourites list
 @login_required
 def add_to_favorites(request, city_name):
     """ Add a city to the user's favorites """
@@ -301,7 +301,7 @@ def add_to_favorites(request, city_name):
             request, f'"{city_name}" is already in your favorites.')
     return redirect('weather:index')
 
-
+# Removes city from favourites list
 @login_required
 def remove_from_favorites(request, city_name):
     """ Remove a city from the user's favorites """
@@ -320,7 +320,7 @@ def remove_from_favorites(request, city_name):
     return redirect('weather:index')
 
 
-
+# Renders favourites list
 @login_required
 def favourites(request):
     if request.user.is_authenticated:
@@ -331,7 +331,7 @@ def favourites(request):
         favorite_cities = []
     return render(request, 'weather/favourites.html', {'favorite_cities':favorite_cities})
 
-
+# Fetches the current forecast data
 @login_required
 def current(request):
     if request.method == 'GET':
@@ -396,7 +396,7 @@ def current(request):
     # Renders the current.html template
     return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
-
+# Fetches the average hourly forecast temperature data
 @login_required
 def hourlyFcastCity(request,city_name):
     fcast = None
@@ -404,8 +404,9 @@ def hourlyFcastCity(request,city_name):
         fcast = HourlyForecast.objects.filter(owner=request.user.profile,city_name=str(city_name).lower()).order_by('-fcast_date')[:4] #last 4
     return render(request,'weather/hourlyFcast.html',{'fcast':fcast})
 
+
+# Groups hourly forecast by day
 def group_forecast_by_day(hourly_forecast):
-    # Group hourly forecast by day
     grouped_forecast = {}
     for forecast in hourly_forecast:
         day = forecast['day_of_week']
@@ -414,6 +415,7 @@ def group_forecast_by_day(hourly_forecast):
         grouped_forecast[day].append(forecast)
     return grouped_forecast
 
+# Fetches the hourly forecast data
 @login_required
 def hourly(request):
     if request.method == 'POST':

@@ -1,19 +1,27 @@
 {% extends "weather/base.html" %}
 {% load crispy_forms_tags %} 
 {% block content %}
+    <!-- Container for the registration form -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <!-- Content section with text white -->
                 <div class="content-section text-white">
+                    <!-- Form for user registration -->
                     <form method="POST">
+                        <!-- CSRF token for form submission -->
                         {% csrf_token %}  
                         <fieldset class="form-group">
+                            <!-- Legend for the registration form -->
                             <legend class="border-bottom mb-4">Register</legend>
+                            <!-- Render the crispy form -->
                             {% crispy form %}
                         </fieldset>
+                        <!-- Section for already registered users to sign in -->
                         <div class="border-top pt-3 text-center">
-                            <small class="text-muted fs-6"> <!-- Add fs-6 class to make text slightly bigger -->
-                                Already Have An Account? <a class="ml-2 text-black" href="{% url 'users:login' %}">Sign In</a>
+                            <small class="text-muted fs-6"> 
+                                Already Have An Account? <!-- Link to sign in page -->
+                                <a class="ml-2 text-black" href="{% url 'users:login' %}">Sign In</a>
                             </small>
                         </div>
                     </form>
@@ -23,4 +31,5 @@
     </div>
     <br><br><br>
 {% endblock content %}
+
 

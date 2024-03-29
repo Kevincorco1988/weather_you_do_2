@@ -1,13 +1,18 @@
-{% extends "weather/base.html" %}
-{% block content %}
-<div class="container mt-5">
-    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Find the current weather</h1>
-    <form action="{% url 'weather:current' %}" method="GET">
+{% extends "weather/base.html" %} <!-- Extends base.html template -->
+
+{% block content %} <!-- Defines content block -->
+
+<div class="container mt-5"> <!-- Main content container -->
+    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Find the current weather</h1> <!-- Heading for current weather search -->
+
+    <form action="{% url 'weather:current' %}" method="GET"> <!-- Form for current weather search -->
         <div class="container"> 
             <div class="row justify-content-center">
+                <!-- Input field for city name -->
                 <div class="col-md-3 mb-3">
                     <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
                 </div>
+                <!-- Dropdown for selecting country -->
                 <div class="col-md-3 mb-3">
                     <select class="form-select" name="country_code">
                         <option value="">Select Country</option>
@@ -16,16 +21,19 @@
                         {% endfor %}
                     </select>
                 </div>
+                <!-- Search button -->
                 <div class="col-md-3 mb-3">
                     <button type="submit" class="btn btn-dark-blue">Search</button>
                 </div>
             </div>
         </div>
     </form>    
-    <br><br><br><br><br>
+
+    <br><br><br><br><br> 
 
     {% if current_weather %}
         {% if request.user.is_authenticated and is_favorite != None %}
+            <!-- Displays add/remove from favourites link -->
             <div class="mt-5 d-flex justify-content-center align-items-center">
                 <div class="text-center">
                     {% if is_favorite %}
@@ -38,11 +46,12 @@
         {% endif %}
     {% endif %}
 
-
     {% if current_weather %}
+        <!-- Displays current weather data -->
         <div class="mt-5">
             <h2 class="text-center">Current Weather</h2>
             <ul class="list-group">
+                <!-- Displays weather details -->
                 <li class="list-group-item list-group-item-custom-background"><strong class="label-text">City:</strong> <span class="data-text">{{ current_weather.city_name }}</span></li>
                 <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Country Code:</strong> <span class="data-text">{{ current_weather.country_code }}</span></li>
                 <li class="list-group-item list-group-item-custom-background"><strong class="label-text">Local Time:</strong> <span class="data-text">{{ current_weather.local_time }}</span></li>
@@ -59,6 +68,7 @@
         </div>
     {% else %}
         {% if city_name != None %}
+            <!-- Displays no search results message -->
             <div class="container text-center mt-5">
                 <div class="alert alert-warning" role="alert">
                     <h4 class="alert-heading">No search results!</h4>
@@ -68,7 +78,10 @@
             <br><br><br>
         {% endif %}
     {% endif %}
-</div>
-<br><br><br>
-{% endblock %}
+</div> <!-- End of main content container -->
+
+<br><br><br> 
+
+{% endblock %} <!-- End of content block -->
+
 

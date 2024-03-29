@@ -1,14 +1,18 @@
-{% extends "weather/base.html" %}
-{% block content %}
-<div class="container mt-4">
-    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Your Favourite Cities</h1>
+{% extends "weather/base.html" %} <!-- Extends base.html template -->
+
+{% block content %} <!-- Defines content block -->
+
+<div class="container mt-4"> <!-- Main content container -->
+    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Your Favourite Cities</h1> <!-- Heading for favourite cities -->
+
     <div class="row">
-        {% for city in favorite_cities %}
+        {% for city in favorite_cities %} <!-- Loops through each favourite city -->
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">{{ city|capfirst }}</h5>
+                    <h5 class="card-title">{{ city|capfirst }}</h5> <!-- Displays city name with first letter capitalized -->
                     <p class="card-text">Check the weather for {{ city|capfirst }}.</p>
+                    <!-- Buttons to view weather forecasts for the city -->
                     <a href="{% url 'weather:current' %}?city_name={{ city }}" class="btn btn-primary">Current Forecast</a>
                     <a href="{% url 'weather:hourly' %}?city_name={{ city }}" class="btn btn-primary">Hourly Forecast</a>
                     <a href="{% url 'weather:hourlyFcastCity' city_name=city %}" class="btn btn-primary mt-2">AVG Hourly Forecast</a>
@@ -16,6 +20,7 @@
             </div>
         </div>
         {% empty %}
+        <!-- Displays message if no favourite cities are added -->
         <div class="col">
             <div class="alert alert-info" role="alert">
                 No favorite cities added yet.
@@ -24,7 +29,9 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %}
+
+{% endblock %} <!-- End of content block -->
+
 
 
 

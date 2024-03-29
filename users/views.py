@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import UserRegisterForm 
+from .forms import UserRegisterForm, ProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout, authenticate
+from django.contrib.auth import login as auth_login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Profile
-from .forms import ProfileForm
 from django.views.decorators.csrf import csrf_protect
 
 def register(request):
+    """View for user registration."""
     if request.user.is_authenticated:
         return redirect('users:profile', pk=request.user.profile.id) 
     if request.method == 'POST':
@@ -29,6 +28,7 @@ def register(request):
 
 @csrf_protect
 def login(request):
+    """View for user login."""
     if request.user.is_authenticated:
         return redirect('weather:index') 
 
@@ -51,13 +51,12 @@ def login(request):
     else:
         form = AuthenticationForm()
 
-    return render(request, 'login.html', {'form':form})
-
+    return render(request, 'login.html', {'form': form})
 
 @login_required(login_url='users:login')
 def edit_account(request):
+    """View for editing user account."""
     profile = request.user.profile
-    print("profile",profile)
     form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
@@ -73,6 +72,7 @@ def edit_account(request):
 
 @login_required(login_url='users:login')
 def delete_account(request):
+    """View for deleting user account."""
     profile = request.user.profile
     if request.method == 'POST':
         profile.delete()
@@ -82,9 +82,8 @@ def delete_account(request):
 
 @login_required 
 def profile(request, pk):
-    #user = User.objects.get(id=pk)
+    """View for user profile."""
     profile = Profile.objects.get(id=pk)
-    print("profile",profile)
     context = {
         'profile': profile
     }
@@ -92,10 +91,13 @@ def profile(request, pk):
 
 @login_required 
 def logout_view(request):
+    """View for user logout."""
     if request.method == 'POST':
         logout(request)
         messages.success(request, 'User was successfully signed out!')
         return redirect('users:login')
     else:
         return render(request, 'logout.html')
+
+
 

@@ -1,42 +1,44 @@
-{% extends "weather/base.html" %}
+{% extends "weather/base.html" %} <!-- Extends base.html template -->
 
-{% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover text-center">
-                    <thead class="thead-dark">
+{% block content %} <!-- Defines content block -->
+
+<div class="container mt-4"> <!-- Main content container -->
+    <div class="row justify-content-center"> <!-- Row for centering content -->
+        <div class="col-lg-10"> <!-- Column with width adjustment for large screens -->
+            <div class="table-responsive"> <!-- Responsive table -->
+                <table class="table table-striped table-bordered table-hover text-center"> <!-- Table styling -->
+                    <thead class="thead-dark"> <!-- Table header styling -->
                         <tr>
-                            <th scope="col">City</th>
+                            <th scope="col">City</th> <!-- Table column headers -->
                             <th scope="col">Forecast Date</th>
                             <th scope="col">Average</th>
                             <th scope="col">Hours Count</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for f in fcast %}
+                        {% for f in fcast %} <!-- Loops through hourly forecast data -->
                         <tr>
-                            <td>{{ f.city_name|title }}</td> 
-                            <td>{{ f.fcast_date|date:"d/m/Y" }}</td> 
-                            <td>{{ f.avg }}</td>
-                            <td>{{ f.hours_count }}</td>
+                            <td>{{ f.city_name|title }}</td> <!-- Displays city name with first letter capitalized -->
+                            <td>{{ f.fcast_date|date:"d/m/Y" }}</td> <!-- Displays forecast date with specified format -->
+                            <td>{{ f.avg }}</td> <!-- Displays average value -->
+                            <td>{{ f.hours_count }}</td> <!-- Displays hours count -->
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center">No data available</td>
+                            <td colspan="4" class="text-center">No data available</td> <!-- Displays message if no data available -->
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class="text-center mt-3">
-                <a href="{% url 'weather:favourites' %}" class="btn btn-dark-blue">Back to Favourites</a>
+            <div class="text-center mt-3"> <!-- Center-aligned back button -->
+                <a href="{% url 'weather:favourites' %}" class="btn btn-dark-blue">Back to Favourites</a> <!-- Button to navigate back to favourites -->
             </div>            
         </div>
     </div>
 </div>
-{% endblock %}
+
+{% endblock %} <!-- End of content block -->
 
 
 

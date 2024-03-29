@@ -1,25 +1,32 @@
 {% extends "weather/base.html" %}
 {% block content %}
 
-<!-- Edit profile form -->
-
+<!-- Container for the edit profile form -->
 <main class="container mt-0 mb-5">
 
     <div class="row justify-content-center g-0 mt-5">
-        <div
-            class="col-12 col-md-6 col-lg-5 col-xl-4 p-2 mt-5 card-welcome border border-dark border-2 rounded-4 justify-content-center">
+        <!-- Card for the edit profile form -->
+        <div class="col-12 col-md-6 col-lg-5 col-xl-4 p-2 mt-5 card-welcome border border-dark border-2 rounded-4 justify-content-center">
+            <!-- Form for editing profile details -->
             <form method="POST" action="{% url 'users:edit_account' %}" enctype="multipart/form-data">
+                <!-- Button to navigate back to the profile -->
                 <a href="{% url 'users:profile' request.user.profile.id %}" class="btn btn-secondary">Back</a>
+                <!-- Heading for the edit profile section -->
                 <h1 class="mb-3 mt-0">Edit Details</h1>
+                <!-- CSRF token for form submission -->
                 {% csrf_token %}
 
+                <!-- Loop through form fields -->
                 {% for field in form %}
+                <!-- Label for the form field -->
                 <label style="color: white;">{{field.label}}</label>
                 <br>
+                <!-- Render the form field -->
                 {{field}}
                 <br>
                 {% endfor %}
 
+                <!-- Submit button for saving changes -->
                 <input class="btn btn-dark-blue" type="submit" value="Save">
             </form>
         </div>
@@ -28,3 +35,4 @@
 <br><br><br>
 
 {% endblock content %}
+

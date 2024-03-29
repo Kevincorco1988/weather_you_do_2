@@ -1,15 +1,20 @@
-{% extends "weather/base.html" %}
-{% load crispy_forms_tags %}
+{% extends "weather/base.html" %} <!-- Extends base.html template -->
 
-{% block content %}
-<div class="container mt-5">
-    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Hourly Forecast 4 days</h1>
-    <form action="{% url 'weather:hourly' %}" method="GET">
+{% load crispy_forms_tags %} <!-- Loads crispy forms tags -->
+
+{% block content %} <!-- Defines content block -->
+
+<div class="container mt-5"> <!-- Main content container -->
+    <h1 class="display-6 text-center mb-5 welcome-text p-3 bg-white border rounded text-black d-inline-block font-weight-bold">Hourly Forecast 4 days</h1> <!-- Heading for hourly forecast -->
+
+    <form action="{% url 'weather:hourly' %}" method="GET"> <!-- Form for hourly forecast search -->
         <div class="container">
             <div class="row justify-content-center">
+                <!-- Input field for city name -->
                 <div class="col-md-3 mb-3">
                     <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
                 </div>
+                <!-- Dropdown for selecting country -->
                 <div class="col-md-3 mb-3">
                     <select class="form-select" name="country_code">
                         <option value="">Select Country</option>
@@ -18,16 +23,18 @@
                         {% endfor %}
                     </select>
                 </div>
+                <!-- Search button -->
                 <div class="col-md-3 mb-3">
                     <button type="submit" class="btn btn-dark-blue">Search</button>
                 </div>
             </div>
         </div>
     </form>
-    <br><br><br><br><br>
+    <br><br><br><br><br> 
 
     {% if grouped_forecast %}
         {% if request.user.is_authenticated and is_favorite != None %}
+            <!-- Displays add/remove from favourites link -->
             <div class="mt-5 d-flex justify-content-center align-items-center">
                 <div class="text-center">
                     {% if is_favorite %}
@@ -39,6 +46,7 @@
             </div>
         {% endif %}
 
+        <!-- Form for getting the average temperature -->
         <div class="average-container mt-5 rounded border border-white p-4 d-inline-block" style="max-width: 500px;">
             <h3 class="mb-4 text-black">Get the average temperature for the next 4 days</h3>
             <form method="POST" action="{% url 'weather:hourly' %}" class="mt-3">
@@ -48,6 +56,7 @@
             </form>
         </div>        
 
+        <!-- Displays hourly forecast data -->
         <div class="mt-5">
             {% for day, forecasts in grouped_forecast.items %}
                 <div class="day-forecasts mb-5">
@@ -79,6 +88,7 @@
         </div>
     {% else %}
         {% if city_name != None %}
+            <!-- Displays no search results message -->
             <div class="container text-center mt-5">
                 <div class="alert alert-warning" role="alert">
                     <h4 class="alert-heading">No search results!</h4>
@@ -88,9 +98,12 @@
             <br><br><br>
         {% endif %}
     {% endif %}
-</div>
-<br><br><br>
-{% endblock %}
+</div> <!-- End of main content container -->
+
+<br><br><br> 
+
+{% endblock %} <!-- End of content block -->
+
 
 
 
