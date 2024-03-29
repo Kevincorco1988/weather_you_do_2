@@ -10,4 +10,5 @@ urlpatterns = [
     path('favourites/', views.favourites, name='favourites'),
     path('add_to_favorites/<str:city_name>/', views.add_to_favorites, name='add_to_favorites'), # noqa
     path('remove_from_favorites/<str:city_name>/', views.remove_from_favorites, name='remove_from_favorites'),
+    path('hourly/<str:city_name>/', views.hourlyFcastCity ,name="hourlyFcastCity")
 ]

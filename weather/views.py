@@ -3,8 +3,12 @@ import datetime as dt
 import os
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.utils.text import capfirst
-from .models import Favourite
+from .models import Favourite, HourlyForecast
+from itertools import groupby
+from operator import itemgetter
+from .forms import HourlyFcastForm
 
 # Third-Party Imports
 import pytz
@@ -393,7 +397,12 @@ def current(request):
     return render(request, 'weather/current.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
 
 
-
+@login_required
+def hourlyFcastCity(request,city_name):
+    fcast = None
+    if request.user.is_authenticated:
+        fcast = HourlyForecast.objects.filter(owner=request.user.profile,city_name=str(city_name).lower()).order_by('-fcast_date')[:4] #last 4
+    return render(request,'weather/hourlyFcast.html',{'fcast':fcast})
 
 def group_forecast_by_day(hourly_forecast):
     # Group hourly forecast by day
@@ -407,15 +416,45 @@ def group_forecast_by_day(hourly_forecast):
 
 @login_required
 def hourly(request):
+    if request.method == 'POST':
+        form = HourlyFcastForm(request.POST)
+        print("form.is_valid()",form.is_valid())
+        print("form.errors.as_data()",form.errors.as_data())
+        if form.is_valid():
+            form = form.cleaned_data
+            print('form', form)
+            city_name = form['city_name']
+            hfcast = request.session.get('hfcast', {})
+            if hfcast:
+                if 'city_name' in list(hfcast[0].keys()):
+                    for h in hfcast:
+                        h_dt = (dt.datetime.strptime(str(h['timezone']), '%Y%m%d').strftime('%m/%d/%Y')).split("/")
+                        fc, created = HourlyForecast.objects.get_or_create(owner=request.user.profile,city_name=str(city_name).lower(),fcast_date=dt.datetime(int(h_dt[2]),int(h_dt[0]),int(h_dt[1])).date(), defaults={"avg": h['average'], "hours_count": h['totalhours']})
+                        if not created:
+                            fc.avg = float(h['average'])
+                            fc.hours_count = h['totalhours']
+                            fc.save()
+                    #if 'hfcast' in request.session: del request.session['hfcast']
+                    messages.success(request,f"{city_name} forecast added")
+                    return redirect("weather:hourlyFcastCity",city_name=hfcast[0]['city_name'])
+                    #return redirect("weather:hourly")
+        hfcast = request.session.get('hfcast', {})
+        if 'city_name' in list(hfcast[0].keys()):
+            messages.error(request,f"{hfcast[0]['city_name']} forecast not added")
+        else:
+            messages.error(request,f"City forecast not added")
+        return redirect("weather:hourly")
     if request.method == 'GET':
         # Gets the city name and country code from the request
-        city_name = request.GET.get('city_name')
+        city_name = request.GET.get('city_name', "")
+        form = HourlyFcastForm({'city_name': city_name})
         country_code = request.GET.get('country_code')
         is_favorite = False  # Initialize is_favorite
 
         if city_name:
             # API key for OpenWeatherMap
             api_key = os.getenv('api_key')
+            if 'hfcast' in request.session: del request.session['hfcast']
 
             # Encodes the city name before constructing the URL
             encoded_city_name = urllib.parse.quote(city_name)
@@ -433,6 +472,7 @@ def hourly(request):
                 # Loads the response data as JSON
                 data = json.loads(response.read())
                 hourly_forecast = []
+                dt_date_fcast = []
                 # Extracts relevant forecast information from the response data
                 for item in data['list']:
                     #print(int(item['dt']),int(data['city']['timezone'])/3600, (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%Y-%m-%d %H:%M:%S'),(dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'))
@@ -449,16 +489,14 @@ def hourly(request):
                         'forecast_icon': f"http://openweathermap.org/img/wn/{item['weather'][0]['icon']}.png"
                     }
                     hourly_forecast.append(forecast)
-                """
-                print(hourly_forecast)
-                with open(r'data.txt', 'w') as fp:
-                    for item in hourly_forecast:
-                        # write each item on a new line
-                        fp.write("%s\n" % item)
-                        """
+                    dt_fcast_temp = {"dateint": int((dt.datetime.utcfromtimestamp(int(item["dt"])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).date().strftime("%Y%m%d")),"date":(dt.datetime.utcfromtimestamp(int(item["dt"])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).date(),"fcast":item['main']['temp']}
+                    dt_date_fcast.append(dt_fcast_temp)
+
+
                 
                 # Group hourly forecast by day
                 grouped_forecast = group_forecast_by_day(hourly_forecast)
+
                 
                 # Print the fetched data
                 print("Hourly Forecast:")
@@ -477,13 +515,36 @@ def hourly(request):
                 is_favorite = Favourite.objects.filter(
                     owner=request.user.profile, city_name=city_name.lower()).exists()
             print(is_favorite)
+
+            group_dt_date_fcast = []
+            avg_list = []
+            if request.user.is_authenticated and grouped_forecast:
+                for key, items in groupby(dt_date_fcast, itemgetter('date')):
+                    print(key,items)
+                    group_dt_date_fcast.append(list(items))
+                    
+                print("group_dt_date_fcast",group_dt_date_fcast)
+
+                for item in group_dt_date_fcast:
+                    dt_int = item[0]['dateint']
+                    size = len(item)
+                    sum = 0
+                    for k in range(size):
+                        # sum up the ages of each department
+                        sum += float((item[k]['fcast']))
+                    avg = sum/int(size)
+                    avg_list.append({"timezone":dt_int, "average":round(avg,2), "totalhours": size, 'city_name': city_name})
+                request.session['hfcast'] = avg_list
+                request.session.modified = True
+                print('session',request.session['hfcast'])
+
             # Renders the hourly.html template with hourly forecast data
-            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name, 'is_favorite':is_favorite})
+            return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name, 'is_favorite':is_favorite, 'form':form})
         else:
             # If city name is empty, renders the hourly.html template without attempting to fetch data
-            return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
+            return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None, 'form':form})
 
     # Renders the hourly.html template
-    return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None})
+    return render(request, 'weather/hourly.html', {'country_codes': COUNTRY_CODES, 'is_favorite':None, 'form':form})
 
 

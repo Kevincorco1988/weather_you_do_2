@@ -43,7 +43,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8 offset-md-2 message-color text-center">
                 {% for message in messages %}
-                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
                     <span class="fs-5">
                         {{ message | safe }}
                     </span>
@@ -52,7 +52,7 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
+    </div>    
     
 
     <main class="container mb-4">

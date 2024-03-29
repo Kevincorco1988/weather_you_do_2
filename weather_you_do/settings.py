@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 load_dotenv()
 development = os.environ.get('DEVELOPMENT', False).lower() == 'True'
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'weather_you_do.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -96,7 +97,10 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 """
+
+
 if (development == 'True'):
     DATABASES = {
         'default': {
@@ -108,7 +112,7 @@ else:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-"""
+
 
 
 # Password validation
@@ -169,20 +173,6 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-"""
-if (development):
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  
-    DEFAULT_FROM_EMAIL = 'admin@fake.com'
-else:
-    print('ok')
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_USE_TLS = True
-    EMAIL_PORT = 587
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
-    DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
-    """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

@@ -29,9 +29,9 @@
             <div class="mt-5 d-flex justify-content-center align-items-center">
                 <div class="text-center">
                     {% if is_favorite %}
-                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:remove_from_favorites' city_name %}" class="text-white">Remove from Favourites</a></small></p>
+                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:remove_from_favorites' city_name %}" class="text-white">Remove from Favourites List</a></small></p>
                     {% else %}
-                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:add_to_favorites' city_name %}" class="text-white">Add to Favourites</a></small></p>
+                        <p class="fs-1"><i class="fas fa-heart text-danger"></i><small class="text-white"> <a href="{% url 'weather:add_to_favorites' city_name %}" class="text-white">Add to Favourites List</a></small></p>
                     {% endif %}
                 </div>
             </div>

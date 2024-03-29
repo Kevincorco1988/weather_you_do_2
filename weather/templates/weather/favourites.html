@@ -11,6 +11,7 @@
                     <p class="card-text">Check the weather for {{ city|capfirst }}.</p>
                     <a href="{% url 'weather:current' %}?city_name={{ city }}" class="btn btn-primary">Current Forecast</a>
                     <a href="{% url 'weather:hourly' %}?city_name={{ city }}" class="btn btn-primary">Hourly Forecast</a>
+                    <a href="{% url 'weather:hourlyFcastCity' city_name=city %}" class="btn btn-primary mt-2">AVG Hourly Forecast</a>
                 </div>
             </div>
         </div>

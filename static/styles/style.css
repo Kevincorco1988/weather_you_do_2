@@ -51,13 +51,37 @@
     background-color: blue;
 }
 
-.message-color {
-    color: #fff;
+
+.message-color, .alert-success {
+    color: #fff; 
 }
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+
 
 .font-weight-bold {
     font-weight: bold;
 }
+
+.average-container {
+    background-color: white;
+}
+
+.average-container.rounded {
+    border-radius: 10px; 
+}
+
+.btn-dark-blue {
+    background-color: #0056b3; 
+    color: #fff;
+}
+
+
 
 
 
