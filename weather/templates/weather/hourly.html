@@ -12,7 +12,7 @@
             <div class="row justify-content-center">
                 <!-- Input field for city name -->
                 <div class="col-md-3 mb-3">
-                    <input type="text" class="form-control" placeholder="Enter city name" name="city_name">
+                    <input type="text" class="form-control" placeholder="Enter city name" pattern="[a-zA-Z]+" name="city_name">
                 </div>
                 <!-- Dropdown for selecting country -->
                 <div class="col-md-3 mb-3">
@@ -51,7 +51,7 @@
             <h3 class="mb-4 text-black">Get the average temperature for the next 4 days</h3>
             <form method="POST" action="{% url 'weather:hourly' %}" class="mt-3">
                 {% csrf_token %}
-                {{ form }}
+                {{ form | crispy}}
                 <input class="btn btn-primary" type="submit" name="add_remove_hfcast" value="Submit">
             </form>
         </div>        

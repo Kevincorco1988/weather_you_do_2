@@ -420,11 +420,8 @@ def group_forecast_by_day(hourly_forecast):
 def hourly(request):
     if request.method == 'POST':
         form = HourlyFcastForm(request.POST)
-        print("form.is_valid()",form.is_valid())
-        print("form.errors.as_data()",form.errors.as_data())
         if form.is_valid():
             form = form.cleaned_data
-            print('form', form)
             city_name = form['city_name']
             hfcast = request.session.get('hfcast', {})
             if hfcast:
@@ -450,6 +447,7 @@ def hourly(request):
         # Gets the city name and country code from the request
         city_name = request.GET.get('city_name', "")
         form = HourlyFcastForm({'city_name': city_name})
+        form.fields['city_name'].widget.attrs['readonly'] = True
         country_code = request.GET.get('country_code')
         is_favorite = False  # Initialize is_favorite
 
@@ -467,7 +465,6 @@ def hourly(request):
             else:
                 # Constructs the URL to fetch hourly forecast data with only city name
                 url = f'https://pro.openweathermap.org/data/2.5/forecast/hourly?q={encoded_city_name}&appid={api_key}&units=metric'
-            print(url)
             try:
                 # Opens the URL and read the response
                 response = urllib.request.urlopen(url)
@@ -477,7 +474,6 @@ def hourly(request):
                 dt_date_fcast = []
                 # Extracts relevant forecast information from the response data
                 for item in data['list']:
-                    #print(int(item['dt']),int(data['city']['timezone'])/3600, (dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=int(data['city']['timezone'])/3600)).strftime('%Y-%m-%d %H:%M:%S'),(dt.datetime.utcfromtimestamp(int(item['dt'])) + dt.timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S'))
                     forecast = {
                         'time': item['dt_txt'],
                         'temperature': item['main']['temp'],
@@ -499,14 +495,6 @@ def hourly(request):
                 # Group hourly forecast by day
                 grouped_forecast = group_forecast_by_day(hourly_forecast)
 
-                
-                # Print the fetched data
-                print("Hourly Forecast:")
-                #print(json.dumps(grouped_forecast, indent=4))
-                """
-                with open('data.json', 'w', encoding='utf-8') as f:
-                    json.dump(grouped_forecast, f, ensure_ascii=False, indent=4)
-                    """
                     
             except Exception as e:
                 # Prints error message if an exception occurs
@@ -516,16 +504,13 @@ def hourly(request):
             if request.user.is_authenticated and grouped_forecast:
                 is_favorite = Favourite.objects.filter(
                     owner=request.user.profile, city_name=city_name.lower()).exists()
-            print(is_favorite)
 
             group_dt_date_fcast = []
             avg_list = []
             if request.user.is_authenticated and grouped_forecast:
                 for key, items in groupby(dt_date_fcast, itemgetter('date')):
-                    print(key,items)
                     group_dt_date_fcast.append(list(items))
                     
-                print("group_dt_date_fcast",group_dt_date_fcast)
 
                 for item in group_dt_date_fcast:
                     dt_int = item[0]['dateint']
@@ -538,7 +523,7 @@ def hourly(request):
                     avg_list.append({"timezone":dt_int, "average":round(avg,2), "totalhours": size, 'city_name': city_name})
                 request.session['hfcast'] = avg_list
                 request.session.modified = True
-                print('session',request.session['hfcast'])
+                #print('session',request.session['hfcast'])
 
             # Renders the hourly.html template with hourly forecast data
             return render(request, 'weather/hourly.html', {'grouped_forecast': grouped_forecast, 'country_codes': COUNTRY_CODES, 'city_name': city_name, 'is_favorite':is_favorite, 'form':form})

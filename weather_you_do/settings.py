@@ -31,21 +31,24 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #Change to false before deployment
+if (development == 'True'):
+    DEBUG = True #Change to false before deployment
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary_storage',
     'cloudinary',
     'weather.apps.WeatherConfig',
     'users.apps.UsersConfig',
@@ -89,16 +92,7 @@ WSGI_APPLICATION = 'weather_you_do.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
-DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
-"""
 
 
 if (development == 'True'):
@@ -166,6 +160,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

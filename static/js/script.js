@@ -4,4 +4,4 @@ setTimeout(function () {
     alert.close();
 }, 5000);
 
-document.getElementById('id_city_name').disabled = true;
+//document.getElementById('id_city_name').disabled = true;
