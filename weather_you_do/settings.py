@@ -30,10 +30,13 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+"""
 if (development == 'True'):
     DEBUG = True 
 else:
     DEBUG = False
+    """
+DEBUG = False
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
 
@@ -95,7 +98,7 @@ WSGI_APPLICATION = 'weather_you_do.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-
+"""
 if (development == 'True'):
     DATABASES = {
         'default': {
@@ -107,7 +110,11 @@ else:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
+"""
 
+DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
 
 
 # Password validation
